@@ -13,6 +13,9 @@ A Chromatic Instrument Tuner in Python.
 Just for clarity. I changed PyAudio for sounddevice and soundfile.
 The rest of the code hasn't changed.
 
+After that you can make a shortcut to run the app by right clicking on the desktop and selecting 
+"New" => "Shortcut" and fill in the path to your main.py. ("C:\Path\to\FineTuned\main.py")
+
 ## Licenses
 ### Icons (modified)
 https://www.dreamstime.com/sun-pixel-icon-weather-vector-illustration-isolated-image180225058?fbclid=IwAR2ukLl71K9__W7nJP1yWC0GxJ2G5LfW36QD4TiruLhUTMkhqcFFABznOoI  
