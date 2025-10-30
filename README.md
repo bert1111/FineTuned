@@ -8,17 +8,11 @@ A Chromatic Instrument Tuner in Python.
 1. Install Dependecies:  
 `pip install -r requirements.txt`
 2. Run:  
-`python3 main.py`
-### PyAudio installation (Windows)
-PyAudio has some problems during installation on windows. To install you can follow one of the following methods:  
-1. `pip install pipwin`  
-2. `pipwin install pyaudio`
+`python main.py`
 
-or
+Just for clarity. I changed PyAudio for sounddevice and soundfile.
+The rest of the code hasn't changed.
 
-1. Visit https://www.lfd.uci.edu/~gohlke/pythonlibs/#_pyaudio  
-2. Download PyAudio‑....whl (depending on your system)
-3. `pip install PyAudio‑....whl`
 ## Licenses
 ### Icons (modified)
 https://www.dreamstime.com/sun-pixel-icon-weather-vector-illustration-isolated-image180225058?fbclid=IwAR2ukLl71K9__W7nJP1yWC0GxJ2G5LfW36QD4TiruLhUTMkhqcFFABznOoI  

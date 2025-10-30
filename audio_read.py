@@ -1,7 +1,8 @@
 from scipy.io import wavfile
 import matplotlib.pyplot as plt
 import numpy as np
-import pyaudio
+import sounddevice as sd
+import soundfile as sf
 from audio_utils import audio_fft
 
 
@@ -15,9 +16,15 @@ def read_audio_file(file_name):
 
     # only Wave format supported
     if file_name.endswith('.wav'):
-        sample_rate, signal = wavfile.read(file_name)
-        left_channel_signal = signal[:, 0]
-        right_channel_signal = signal[:, 1]
+        data, sample_rate = sf.read(file_name, dtype='float32')
+        if data.ndim == 1:
+            # mono
+            left_channel_signal = data
+            right_channel_signal = None
+        else:
+            # stereo
+            left_channel_signal = data[:, 0]
+            right_channel_signal = data[:, 1]
 
         return sample_rate, left_channel_signal, right_channel_signal
     else:
@@ -31,23 +38,18 @@ def read_real_time_audio(interval=1):
     :return: a tuple with the sample rate and audio signal in numpy array format
     """
 
+    rate = 44100
+    chunk_size = int(rate * interval)
     try:
-        rate = 44100
-        chunk_size = int(rate * interval)
-
-        p = pyaudio.PyAudio()
-        stream = p.open(format=pyaudio.paFloat32, channels=1, rate=rate, input=True, frames_per_buffer=chunk_size)
-
-        # iteratively read from audio stream
-        while True:
-            data = stream.read(chunk_size)
-            np_data = np.frombuffer(data, dtype=np.float32)
-            yield rate, np_data
-
-    finally:
-        stream.stop_stream()
-        stream.close()
-        p.terminate()
+        # Using sounddevice.InputStream for real-time audio input
+        with sd.InputStream(samplerate=rate, channels=1, dtype='float32', blocksize=chunk_size) as stream:
+            while True:
+                data, overflowed = stream.read(chunk_size)
+                # data shape is (chunk_size, channels) here channels=1
+                np_data = data[:, 0]  # Take the single channel
+                yield rate, np_data
+    except Exception as e:
+        print(f"Error reading audio input: {e}")
 
 
 def plot_audio_signal(signal, sample_rate, samples=None, plot_max_samples=5000, plot_max_freq=1000):
